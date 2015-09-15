@@ -84,12 +84,13 @@ public class MutualInformationEntropyPhraseExtractor implements IPhraseExtractor
             }
             System.out.println();
         }
-
-        for (PairFrequency phrase : occurrence.getPhraseByScore())
+        
+        System.out.println("Finish to compute");
+  /*      for (PairFrequency phrase : occurrence.getPhraseByScore())
         {
             if (phraseList.size() == size) break;
             phraseList.add(phrase.first + phrase.second);
-        }
+        }*/
         return phraseList;
     }
 

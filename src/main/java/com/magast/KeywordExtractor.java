@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.hankcs.hanlp.HanLP;
+import static com.hankcs.hanlp.utility.Predefine.logger;
 
 public class KeywordExtractor {
   public static void main(String[] args){
@@ -20,6 +21,7 @@ public class KeywordExtractor {
     System.out.println(content);
     System.out.println("Read finish###############################");
     HanLP.Config.enableDebug();
+    LoggerUtil.setLogingProperties(logger);
     List<String> phaseList = HanLP.extractPhrase(content, 10);
     //List<String> keywordList = HanLP.extractKeyword(content, 5);
     //System.out.println(keywordList);
