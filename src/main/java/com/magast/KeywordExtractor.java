@@ -10,7 +10,8 @@ public class KeywordExtractor {
   public static void main(String[] args){
     System.out.println("Test");
     //String filePath = "D:/sourcecode/testdata/125.txt";
-    String filePath = "D:/sourcecode/testdata/data/125.txt";
+    //String filePath = "D:/sourcecode/testdata/data/125.txt";
+    String filePath = "data/testdata/125.txt";
     String content = "";
     try {
       content = FileUtil.readFile(filePath);
