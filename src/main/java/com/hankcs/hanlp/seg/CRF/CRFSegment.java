@@ -234,7 +234,7 @@ public class CRFSegment extends CharacterBasedGenerativeModelSegment
                     break;
                 }
                 char c = sentence[++i];
-                while (CharacterHelper.isEnglishLetter(c) || c == ' ')
+                while (CharacterHelper.isEnglishLetter(c) || sentence[i] == ' ')
                 {
                     sbAtom.append(sentence[i]);
                     if (i == maxLen)
