@@ -22,6 +22,8 @@ import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.hankcs.hanlp.utility.Predefine.logger;
+
 /**
  * 利用互信息和左右熵的短语提取器
  * @author hankcs
@@ -51,18 +53,25 @@ public class MutualInformationEntropyPhraseExtractor implements IPhraseExtractor
                             }
                         }
                 };
-        for (List<Term> sentence : NotionalTokenizer.seg2sentence(text, filterChain))
+        
+        StringBuilder sbwd = new StringBuilder();
+        List<List<Term>> sentences = NotionalTokenizer.seg2sentence(text, filterChain);
+        for (List<Term> sentence : sentences)
         {
             if (HanLP.Config.DEBUG)
             {
-                System.out.println(sentence);
+                //System.out.println(sentence);
+                sbwd.append(sentence.toString());
             }
             occurrence.addAll(sentence);
         }
         occurrence.compute();
         if (HanLP.Config.DEBUG)
         {
-            System.out.println(occurrence);
+          logger.info("分词结果===========================================\n");
+          logger.info(sbwd.toString());
+          logger.info("分词结果===========================================\n");
+            /*System.out.println(occurrence);
             for (PairFrequency phrase : occurrence.getPhraseByMi())
             {
                 System.out.print(phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tmi=" + phrase.mi + " , ") ;
@@ -82,7 +91,39 @@ public class MutualInformationEntropyPhraseExtractor implements IPhraseExtractor
             {
                 System.out.print(phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tscore=" + phrase.score + " , ");
             }
-            System.out.println();
+            System.out.println();*/
+          
+          logger.info(occurrence.toString());
+          List<PairFrequency> milist = occurrence.getPhraseByMi();
+          List<PairFrequency> lelist = occurrence.getPhraseByLe();
+          List<PairFrequency> relist = occurrence.getPhraseByRe();
+          List<PairFrequency> sclist = occurrence.getPhraseByScore();
+          for (PairFrequency phrase : milist)
+          {
+              logger.info(phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tmi=" + phrase.mi + " , ") ;
+          }
+          for (PairFrequency phrase : lelist)
+          {
+              logger.info(phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tle=" + phrase.le + " , ") ;
+          }
+          for (PairFrequency phrase : relist)
+          {
+              logger.info(phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tre=" + phrase.re + " , ") ;
+          }
+          
+          StringBuilder sb = new StringBuilder();
+          StringBuilder sb2 = new StringBuilder();
+          for (PairFrequency phrase : sclist)
+          {
+              String output = phrase.getKey().replace(Occurrence.RIGHT, '→') + "\tscore=" + phrase.score + " , ";
+              logger.info(output) ;
+              sb.append(output);
+              sb2.append(phrase.first + phrase.second + ":" + phrase.score);
+          }
+          logger.info("\n============================================\n");
+          logger.info(sb.toString());
+          logger.info("\n===================================================\n");
+          logger.info(sb2.toString());
         }
         
         System.out.println("Finish to compute");

@@ -11,6 +11,7 @@
  */
 package com.hankcs.hanlp.corpus.occurrence;
 
+import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.collection.trie.bintrie.BinTrie;
 import com.hankcs.hanlp.dictionary.CoreDictionary;
 import com.hankcs.hanlp.seg.common.Term;
@@ -18,7 +19,7 @@ import com.hankcs.hanlp.tokenizer.NotionalTokenizer;
 import com.hankcs.hanlp.utility.Predefine;
 
 import java.util.*;
-
+import static com.hankcs.hanlp.utility.Predefine.logger;
 /**
  * 词共现统计，最多统计到三阶共现
  *
@@ -267,6 +268,17 @@ public class Occurrence
             termList[i] = word.word;
             ++i;
         }
+        
+        if (HanLP.Config.DEBUG){
+          StringBuilder sb = new StringBuilder();
+          for (Term word : resultList)
+          {
+              sb.append(word.toString());
+          }
+          logger.info("分词结果开始：=================================");
+          logger.info(sb.toString());
+          logger.info("分词结果结束：=================================");
+        }
         addAll(termList);
     }
 
@@ -287,6 +299,10 @@ public class Occurrence
         for (Map.Entry<String, TriaFrequency> entry : trieTria.entrySet())
         {
             sb.append(entry.getValue()).append('\n');
+        }
+        
+        if (HanLP.Config.DEBUG){
+          logger.info(sb.toString());
         }
         return sb.toString();
     }
@@ -350,6 +366,8 @@ public class Occurrence
         double total_mi = 0;
         double total_le = 0;
         double total_re = 0;
+        
+        StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, PairFrequency> entry : entrySetPair)
         {
             PairFrequency value = entry.getValue();
@@ -359,8 +377,17 @@ public class Occurrence
             total_mi += value.mi;
             total_le += value.le;
             total_re += value.re;
+            
+            sb.append(value.toString() + "::");
         }
-
+        
+        if (HanLP.Config.DEBUG)
+        {
+          logger.info("occurrence开始===========================================\n");
+          logger.info(sb.toString());
+          logger.info("occurrence结束===========================================\n");
+        }
+        
         for (Map.Entry<String, PairFrequency> entry : entrySetPair)
         {
             PairFrequency value = entry.getValue();
